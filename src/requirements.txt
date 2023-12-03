@@ -21,7 +21,7 @@ mecab-python3
 unidic-lite
 einops
 scipy
-flash_attn==2.0.1
+flash_attn>=2.0.1
 fire
 flask
 gpustat
