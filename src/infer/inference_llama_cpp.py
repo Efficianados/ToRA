@@ -170,9 +170,9 @@ def main(args):
             )
             outputs.append(output)
 
-        outputs = sorted(outputs, key=lambda x: int(x.request_id)) # sort outputs by request_id (Due to batched inference)
-        outputs = [output.outputs[0].text for output in outputs]
-        assert len(outputs) == len(current_prompts)
+        # outputs = sorted(outputs, key=lambda x: int(x.request_id)) # sort outputs by request_id (Due to batched inference)
+        # outputs = [output.outputs[0].text for output in outputs]
+        # assert len(outputs) == len(current_prompts)
 
         # process all outputs
         remain_prompts = []
@@ -195,7 +195,26 @@ def main(args):
                 end_prompts.append((i, query))
 
         # execute the remain prompts
-        remain_results = executor.batch_apply(remain_codes)
+        # remain_results = executor.batch_apply(remain_codes)
+
+        remain_results = []
+        code_times = []
+        for code in remain_codes:
+            code_start = time.time()
+            result = executor.apply(code)
+            code_end = time.time()
+
+            code_exec_time = code_end - code_start
+            # code_time_str = f"{int(code_exec_time // 60)}:{int(code_exec_time % 60):02d}"
+            code_times.append(str(code_exec_time))
+            code_times.append('\n')
+
+            remain_results.append(result)
+        
+        # Write the code execution times
+        with open(out_file.replace('.jsonl', f'_code_times_{epoch}.txt'), 'w') as f:
+            f.writelines(code_times)
+
         for k in range(len(remain_prompts)):
             i, query = remain_prompts[k]
             res, report = remain_results[k]
