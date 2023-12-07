@@ -2,9 +2,8 @@ set -ex
 
 # MODEL_NAME_OR_PATH="llm-agents/tora-code-34b-v1.0"
 # MODEL_NAME_OR_PATH="llm-agents/tora-70b-v1.0"
-MODEL_NAME_OR_PATH="llm-agents/tora-7b-v1.0"
-# MODEL_NAME_OR_PATH="$HF_HOME hub/models--llm-agents--tora-7b-v1.0/snapshots/717edbee98945192b1a396fc9c337c5b32d6c79c/"
-# MODEL_NAME_OR_PATH="/data/tir/projects/tir6/general/vveerend/hf_home/hub/models--llm-agents--tora-7b-v1.0/snapshots/717edbee98945192b1a396fc9c337c5b32d6c79c/"
+# MODEL_NAME_OR_PATH="llm-agents/tora-7b-v1.0"
+MODEL_NAME_OR_PATH="/home/vveerend/odml/tora-7b-f16.gguf"
 
 # DATA_LIST = ['math', 'gsm8k', 'gsm-hard', 'svamp', 'tabmwp', 'asdiv', 'mawps']
 
@@ -12,14 +11,13 @@ MODEL_NAME_OR_PATH="llm-agents/tora-7b-v1.0"
 DATA_NAME="gsm8k"
 
 SPLIT="test"
-# PROMPT_TYPE="tora"
-PROMPT_TYPE="pal"
+PROMPT_TYPE="tora"
 # PROMPT_TYPE="pal"
 NUM_TEST_SAMPLE=-1
 
 
 CUDA_VISIBLE_DEVICES=0 TOKENIZERS_PARALLELISM=false \
-python -um infer.inference \
+python -um infer.inference_llama_cpp \
 --model_name_or_path ${MODEL_NAME_OR_PATH} \
 --data_name ${DATA_NAME} \
 --split ${SPLIT} \
