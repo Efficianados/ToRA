@@ -219,7 +219,7 @@ def main(args):
         with open(out_file.replace('.jsonl', f'_code_times_{epoch}.txt'), 'w') as f:
             f.writelines(code_times)
 
-        with open(out_file.replace('.jsonl', f'_responses_{epoch}.pkl'), 'w') as res_f:
+        with open(out_file.replace('.jsonl', f'_responses_{epoch}.pkl'), 'wb') as res_f:
             pickle.dump(responses, res_f)
 
         for k in range(len(remain_prompts)):
