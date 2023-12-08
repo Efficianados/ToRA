@@ -104,7 +104,8 @@ def main(args):
         available_gpus = os.environ['CUDA_VISIBLE_DEVICES'].split(',')
         # llm = LLM(model=args.model_name_or_path, tensor_parallel_size=len(available_gpus))
         print('n_gpu_layers', 300)
-        llm = Llama(model_path=args.model_name_or_path, n_gpu_layers=300) # Offloading all layers to GPU
+        llm = Llama(model_path=args.model_name_or_path, n_gpu_layers=300, n_ctx=args.max_tokens_per_call) # Offloading all layers to GPU 
+        # Setting context to at least the max tokens expected (To avoid error)
     samples = []
     for example in tqdm(examples, total=len(examples)):
         idx = example['idx']
