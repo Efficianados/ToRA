@@ -12,6 +12,7 @@ import llama_cpp
 from llama_cpp import Llama
 from datetime import datetime
 from tqdm import tqdm
+import pickle
 
 from eval.evaluate import evaluate
 from utils.utils import set_seed, load_jsonl, save_jsonl, construct_prompt
@@ -160,14 +161,17 @@ def main(args):
         #                 stop=stop_tokens,
         # ))
         outputs = [] 
+        responses = []
         for prompt in tqdm(prompts):
-            output = llm(prompt,
+            response = llm(prompt,
                     temperature=args.temperature,
                     top_p=args.top_p,
                     max_tokens=args.max_tokens_per_call,
                     # n=1, # THis is just number of outputs to return (For self-consistency?)
                     stop=stop_tokens,
             )
+            responses.append(response)
+            output = response['choices'][0]['text']
             outputs.append(output)
 
         # outputs = sorted(outputs, key=lambda x: int(x.request_id)) # sort outputs by request_id (Due to batched inference)
@@ -214,6 +218,9 @@ def main(args):
         # Write the code execution times
         with open(out_file.replace('.jsonl', f'_code_times_{epoch}.txt'), 'w') as f:
             f.writelines(code_times)
+
+        with open(out_file.replace('.jsonl', f'_responses_{epoch}.pkl'), 'w') as res_f:
+            pickle.dump(responses, res_f)
 
         for k in range(len(remain_prompts)):
             i, query = remain_prompts[k]
