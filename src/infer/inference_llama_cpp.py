@@ -135,7 +135,8 @@ def main(args):
     remain_prompts = [(i, prompt) for i, prompt in enumerate(remain_prompts)]
     end_prompts = []
 
-    max_func_call = 1 if args.prompt_type in ['cot', 'pal'] else 4
+    # max_func_call = 1 if args.prompt_type in ['cot', 'pal'] else 4
+    max_func_call = 1
     stop_tokens = ["</s>", "```output"]
 
     if args.prompt_type in ['cot']:
